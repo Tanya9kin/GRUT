@@ -22,10 +22,15 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Add a plant", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                addPlant();
             }
         });
+    }
+
+    public void addPlant(){
+        //add plant to database
     }
 
     @Override
