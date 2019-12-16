@@ -1,7 +1,10 @@
 package com.example.grut;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,9 +16,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -76,13 +84,24 @@ public class MainActivity extends AppCompatActivity {
 //    private PlantListRecyclerAdapter mAdapter;
 //    private ProgressBar mProgressBar;
 
-    private TextView mView;
+    //private TextView mView;
 
     private Context mContext;
 
+    /**
+     * For Connection to Azure
+     */
     private RequestQueue mQueue;
-
     private JSONObject params;
+
+    /**
+     * For popup to add new plant
+     */
+    private Dialog popUpAddItem;
+    private EditText et_name;
+    private Spinner sp_type;
+    private Button btn_confirm;
+    private Button btn_cancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,16 +110,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mView = findViewById(R.id.plant_test);
+        popUpAddItem = new Dialog(this);
         mContext = getApplicationContext();
         mQueue = Volley.newRequestQueue(this);
         FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setImageDrawable(getDrawable(R.drawable.ic_add_white_24dp));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Add a plant", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                addPlant();
+                openDialog();
             }
         });
 
@@ -108,68 +126,71 @@ public class MainActivity extends AppCompatActivity {
         //setUpRecyclerView();
     }
 
-    public void setUpRequestQueue(){
-// Instantiate the RequestQueue.
-        mQueue = Volley.newRequestQueue(this);
-        String url ="http://www.google.com";
+    /**
+     * Dialog for adding a new plant
+     */
+    private void openDialog() {
+        popUpAddItem.setContentView(R.layout.popup_add_item);
+        et_name = popUpAddItem.findViewById(R.id.plant_name);
+        sp_type = popUpAddItem.findViewById(R.id.plant_type);
+        btn_cancel = popUpAddItem.findViewById(R.id.cancel);
+        btn_confirm = popUpAddItem.findViewById(R.id.confirm);
 
-// Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        //textView.setText("Response is: "+ response.substring(0,500));
-                    }
-                }, new Response.ErrorListener() {
+        btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onErrorResponse(VolleyError error) {
-                //textView.setText("That didn't work!");
+            public void onClick(View v) {
+                String name = String.valueOf(et_name.getText());
+                String type = String.valueOf(sp_type.getSelectedItem());
+                if(name.length() < 4){
+                    Toast.makeText(mContext, "Name should be 4 characters or longer", Toast.LENGTH_SHORT).show();
+
+                } else if(sp_type.getSelectedItem() == null) {
+                    Toast.makeText(mContext, "Choose a type for the plant", Toast.LENGTH_SHORT).show();
+                } else {
+                    addPlant(name,type);
+                    popUpAddItem.dismiss();
+                }
             }
         });
 
-// Add the request to the RequestQueue.
-        mQueue.add(stringRequest);
+        btn_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popUpAddItem.dismiss();
+            }
+        });
+
+        String[] types = getResources().getStringArray(R.array.plant_type);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, types);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sp_type.setAdapter(spinnerAdapter);
+
+        popUpAddItem.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popUpAddItem.show();
     }
 
-//    private void setUpConnection() {
-//        try {
-//            // Create the client instance, using the provided mobile app URL.
-//            mClient = new MobileServiceClient(
-//                    "https://grut-backend.azurewebsites.net",
-//                    this).withFilter(new MainActivity.ProgressFilter());
+//    public void setUpRequestQueue(){
+//// Instantiate the RequestQueue.
+//        mQueue = Volley.newRequestQueue(this);
+//        String url ="http://www.google.com";
 //
-//            // Extend timeout from default of 10s to 20s
-//            mClient.setAndroidHttpClientFactory(new OkHttpClientFactory() {
-//                @Override
-//                public OkHttpClient createOkHttpClient() {
-//                    OkHttpClient client = new OkHttpClient.Builder()
-//                            .connectTimeout(20, TimeUnit.SECONDS)
-//                            .readTimeout(20, TimeUnit.SECONDS)
-//                            .build();
-//
-//                    return client;
-//                }
-//            });
-//
-//            // Get the remote table instance to use.
-//            mPlantTable = mClient.getTable(Plant_item.class);
-//
-//            // Offline sync table instance.
-//            //mPlantTable = mClient.getSyncTable("ToDoItem", Plant_item.class);
-//
-//            //Init local storage
-//            initLocalStore().get();
-//
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        } catch (MobileServiceLocalStoreException e) {
-//            e.printStackTrace();
-//        }
+//// Request a string response from the provided URL.
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        // Display the first 500 characters of the response string.
+//                        //textView.setText("Response is: "+ response.substring(0,500));
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                //textView.setText("That didn't work!");
+//            }
+//        });
+
+// Add the request to the RequestQueue.
+//        mQueue.add(stringRequest);
 //    }
 
     private static void setUpRecyclerView(){
@@ -230,29 +251,42 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
 
-//    public void authenticate(){
-//        mQueue.add(new StringRequest(Request.Method.POST,))
+//    public void getPlants(){
+//        Gson gson = new Gson();
+//
+//        Plant_item plantItem = new Plant_item(Long.toString(System.currentTimeMillis()) ,name, type,0,0,0,0,0,0);
+//        String jsonStringParams = gson.toJson(plantItem);
+//
+//        JsonObjectRequest jsObjRequest = null;
+//        try {
+//            jsObjRequest = new JsonObjectRequest
+//                    (Request.Method.POST, "https://grut-message-endpoint.azurewebsites.net/api/sqlTest", new JSONObject(jsonStringParams), new Response.Listener<JSONObject>() {
+//
+//                        @Override
+//                        public void onResponse(JSONObject response) {
+//                            //TODO inform the recycler view about the addition of a plant
+//                        }
+//                    }, new Response.ErrorListener() {
+//
+//                        @Override
+//                        public void onErrorResponse(VolleyError error) {
+//                            error.printStackTrace();
+//                        }
+//                    }
+//                    );
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//
+//        // Access the RequestQueue through your singleton class.
+//        mQueue.add(jsObjRequest);
 //    }
 
-    public void addPlant(){
-
+    public void addPlant(String name, String type){
         Gson gson = new Gson();
-        Plant_item plantItem = new Plant_item(10,"testplant");
+
+        Plant_item plantItem = new Plant_item(Long.toString(System.currentTimeMillis()) ,name, type,0,0,0,0,0,0);
         String jsonStringParams = gson.toJson(plantItem);
-        Log.wtf("JSON WTF", jsonStringParams);
-
-//        StringRequest testStringRequest = new StringRequest(Request.Method.POST, "https://grut-message-endpoint.azurewebsites.net/api/HttpTrigger1", new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        });
-
 
         JsonObjectRequest jsObjRequest = null;
         try {
@@ -261,17 +295,15 @@ public class MainActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(JSONObject response) {
-                            Log.d("MY ERROR TAG", "we are here, not error");
-                            mView.setText(String.format("Response: %s", response.toString()));
+                            Log.wtf("WTF onResponse",response.toString());
+                            //TODO inform the recycler view about the addition of a plant
                         }
                     }, new Response.ErrorListener() {
 
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            // TODO Auto-generated method stub
-                            mView.setText(error.getMessage());
+                            Log.wtf("WTF on Error",error.getMessage());
                             error.printStackTrace();
-                            Log.d("MY ERROR TAG", "Error1: " + error.getMessage());
                         }
                     }
                     );
@@ -305,151 +337,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-//    /**
-//     * Initialize local storage
-//     * @return
-//     * @throws MobileServiceLocalStoreException
-//     * @throws ExecutionException
-//     * @throws InterruptedException
-//     */
-//    private AsyncTask<Void, Void, Void> initLocalStore() throws MobileServiceLocalStoreException, ExecutionException, InterruptedException {
-//
-//        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
-//            @Override
-//            protected Void doInBackground(Void... params) {
-//                try {
-//
-//                    MobileServiceSyncContext syncContext = mClient.getSyncContext();
-//
-//                    if (syncContext.isInitialized())
-//                        return null;
-//
-//                    SQLiteLocalStore localStore = new SQLiteLocalStore(mClient.getContext(), "OfflineStore", null, 1);
-//
-//                    Map<String, ColumnDataType> tableDefinition = new HashMap<String, ColumnDataType>();
-//                    tableDefinition.put("id", ColumnDataType.String);
-//                    tableDefinition.put("text", ColumnDataType.String);
-//                    tableDefinition.put("complete", ColumnDataType.Boolean);
-//
-//                    localStore.defineTable("ToDoItem", tableDefinition);
-//
-//                    SimpleSyncHandler handler = new SimpleSyncHandler();
-//
-//                    syncContext.initialize(localStore, handler).get();
-//
-//                } catch (final Exception e) {
-//                    createAndShowDialogFromTask(e, "Error");
-//                }
-//
-//                return null;
-//            }
-//        };
-//
-//        return runAsyncTask(task);
-//    }
-//
-//    /**
-//     * Creates a dialog and shows it
-//     *
-//     * @param exception
-//     *            The exception to show in the dialog
-//     * @param title
-//     *            The dialog title
-//     */
-//    private void createAndShowDialogFromTask(final Exception exception, String title) {
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                createAndShowDialog(exception, "Error");
-//            }
-//        });
-//    }
-//
-//    /**
-//     * Creates a dialog and shows it
-//     *
-//     * @param exception
-//     *            The exception to show in the dialog
-//     * @param title
-//     *            The dialog title
-//     */
-//    private void createAndShowDialog(Exception exception, String title) {
-//        Throwable ex = exception;
-//        if(exception.getCause() != null){
-//            ex = exception.getCause();
-//        }
-//        createAndShowDialog(ex.getMessage(), title);
-//    }
-//
-//    /**
-//     * Creates a dialog and shows it
-//     *
-//     * @param message
-//     *            The dialog message
-//     * @param title
-//     *            The dialog title
-//     */
-//    private void createAndShowDialog(final String message, final String title) {
-//        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//
-//        builder.setMessage(message);
-//        builder.setTitle(title);
-//        builder.create().show();
-//    }
-//
-//    /**
-//     * Run an ASync task on the corresponding executor
-//     * @param task
-//     * @return
-//     */
-//    private AsyncTask<Void, Void, Void> runAsyncTask(AsyncTask<Void, Void, Void> task) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-//            return task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//        } else {
-//            return task.execute();
-//        }
-//    }
-//
-//    private class ProgressFilter implements ServiceFilter {
-//
-//        @Override
-//        public ListenableFuture<ServiceFilterResponse> handleRequest(ServiceFilterRequest request, NextServiceFilterCallback nextServiceFilterCallback) {
-//
-//            final SettableFuture<ServiceFilterResponse> resultFuture = SettableFuture.create();
-//
-//
-//            runOnUiThread(new Runnable() {
-//
-//                @Override
-//                public void run() {
-//                    if (mProgressBar != null) mProgressBar.setVisibility(ProgressBar.VISIBLE);
-//                }
-//            });
-//
-//            ListenableFuture<ServiceFilterResponse> future = nextServiceFilterCallback.onNext(request);
-//
-//            Futures.addCallback(future, new FutureCallback<ServiceFilterResponse>() {
-//                @Override
-//                public void onFailure(Throwable e) {
-//                    resultFuture.setException(e);
-//                }
-//
-//                @Override
-//                public void onSuccess(ServiceFilterResponse response) {
-//                    runOnUiThread(new Runnable() {
-//
-//                        @Override
-//                        public void run() {
-//                            if (mProgressBar != null) mProgressBar.setVisibility(ProgressBar.GONE);
-//                        }
-//                    });
-//
-//                    resultFuture.set(response);
-//                }
-//            });
-//
-//            return resultFuture;
-//        }
-//    }
 }

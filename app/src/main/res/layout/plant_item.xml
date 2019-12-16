@@ -37,5 +37,12 @@
         android:layout_toStartOf="@id/plant_drop_2"
         android:src="@drawable/ic_raindrop"/>
 
+    <ImageView
+        android:id="@+id/plant_sun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/plant_drop_3"
+        android:src="@drawable/ic_raindrop"/>
 
 </RelativeLayout>
