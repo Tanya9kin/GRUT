@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName;
 public class Plant_item {
     @SerializedName("id")
     private String id;
-    @SerializedName("name")
-    private String name;
+    @SerializedName("plantName")
+    private String plantName;
     @SerializedName("type")
     private String type;
     @SerializedName("optTemp")
@@ -26,7 +26,7 @@ public class Plant_item {
                       Integer optTemp, Integer optLight, Integer optMoist,
                       Integer  currTemp, Integer currLight, Integer currMoist) {
         this.id = id;
-        this.name = name;
+        this.plantName = name;
         this.type = type;
         this.optTemp = optTemp;
         this.optLight = optLight;
@@ -44,7 +44,7 @@ public class Plant_item {
     }
 
     public String getName(){
-        return name;
+        return plantName;
     }
 
     public Integer getOptTemp() {
@@ -83,7 +83,7 @@ public class Plant_item {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.plantName = name;
     }
 
     public void setType(String type) {

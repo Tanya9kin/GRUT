@@ -109,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
         lst_plants = new ArrayList<>();
         getPlants();
 
+        //setUpRecyclerView();
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setImageDrawable(getDrawable(R.drawable.ic_add_white_24dp));
         fab.setOnClickListener(new View.OnClickListener() {
@@ -298,10 +300,16 @@ public class MainActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                            temp = gson.fromJson(tempObject.toString(), (Type) Plant_item.class);
-                            lst_plants.add(temp);
-                            Log.wtf("JSON OBJECT", temp.getId());
+                        temp = gson.fromJson(tempObject.toString(), (Type) Plant_item.class);
+                        lst_plants.add(temp);
+                        //TODO why name is null
+                        try {
+                            Log.wtf("JSON OBJECT", tempObject.getString("plantName"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
+                    setUpRecyclerView();
                     }, error -> {
                     Log.wtf("WTF on Error",error.getMessage());
                     error.printStackTrace();
