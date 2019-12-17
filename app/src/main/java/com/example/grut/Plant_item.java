@@ -37,6 +37,8 @@ public class Plant_item {
     }
     //will add more things later
 
+    //Getters:
+
     public String getId(){
         return id;
     }
@@ -71,5 +73,44 @@ public class Plant_item {
 
     public String getType() {
         return type;
+    }
+
+    //Setters:
+
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setOptTemp(Integer optTemp) {
+        this.optTemp = optTemp;
+    }
+
+    public void setOptLight(Integer optLight) {
+        this.optLight = optLight;
+    }
+
+    public void setOptMoist(Integer optMoist) {
+        this.optMoist = optMoist;
+    }
+
+    public void setCurrTemp(Integer currTemp) {
+        this.currTemp = currTemp;
+    }
+
+    public void setCurrLight(Integer currLight) {
+        this.currLight = currLight;
+    }
+
+    public void setCurrMoist(Integer currMoist) {
+        this.currMoist = currMoist;
     }
 }

@@ -14,35 +14,38 @@
         android:textSize="30sp"/>
 
     <ImageView
-        android:id="@+id/plant_drop_1"
+        android:id="@+id/plant_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_raindrop"/>
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/ic_001_happy"/>
 
     <ImageView
-        android:id="@+id/plant_drop_2"
+        android:id="@+id/plant_temp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/plant_drop_1"
-        android:src="@drawable/ic_raindrop"/>
+        android:layout_toStartOf="@id/plant_state"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/ic_020_thermometer"/>
 
     <ImageView
-        android:id="@+id/plant_drop_3"
+        android:id="@+id/plant_moist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/plant_drop_2"
-        android:src="@drawable/ic_raindrop"/>
+        android:layout_toStartOf="@id/plant_temp"
+        android:layout_marginLeft="5dp"
+        android:src="@drawable/ic_007_drops"/>
 
     <ImageView
         android:id="@+id/plant_sun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toStartOf="@id/plant_drop_3"
-        android:src="@drawable/ic_raindrop"/>
+        android:layout_toStartOf="@id/plant_moist"
+        android:src="@drawable/ic_022_sun"/>
 
 </RelativeLayout>

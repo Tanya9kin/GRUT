@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -51,11 +54,14 @@ import com.microsoft.windowsazure.mobileservices.table.sync.localstore.MobileSer
 import com.microsoft.windowsazure.mobileservices.table.sync.localstore.SQLiteLocalStore;
 import com.microsoft.windowsazure.mobileservices.table.sync.synchandler.SimpleSyncHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -64,30 +70,15 @@ import okhttp3.OkHttpClient;
 
 public class MainActivity extends AppCompatActivity {
 
-    public PlantListRecyclerAdapter adapter;
-//
-//    /**
-//     *  Client reference
-//     **/
-//    private MobileServiceClient mClient;
-//
-//    /**
-//     * Table used to access data from the mobile app backend.
-//     */
-//    private MobileServiceTable<Plant_item> mPlantTable;
-//
-//    //Offline Sync
-//    /**
-//     * Table used to store data locally sync with the mobile app backend.
-//     */
-//    //private MobileServiceSyncTable<ToDoItem> mPlantTable;
-//    private PlantListRecyclerAdapter mAdapter;
-//    private ProgressBar mProgressBar;
-
-    //private TextView mView;
 
     private Context mContext;
 
+    /**
+     * recycler view stuff
+     */
+    private PlantListRecyclerAdapter adapter;
+    private RecyclerView rv_plantsList;
+    private List<Plant_item> lst_plants;
     /**
      * For Connection to Azure
      */
@@ -113,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
         popUpAddItem = new Dialog(this);
         mContext = getApplicationContext();
         mQueue = Volley.newRequestQueue(this);
+
+        getPlants();
+
+        setUpRecyclerView();
+
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setImageDrawable(getDrawable(R.drawable.ic_add_white_24dp));
         fab.setOnClickListener(new View.OnClickListener() {
@@ -122,9 +118,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //setUpConnection();
-        //setUpRecyclerView();
-    }
+
+}
 
     /**
      * Dialog for adding a new plant
@@ -193,7 +188,13 @@ public class MainActivity extends AppCompatActivity {
 //        mQueue.add(stringRequest);
 //    }
 
-    private static void setUpRecyclerView(){
+    private void setUpRecyclerView(){
+
+        rv_plantsList = findViewById(R.id.plants_list);
+        adapter = new PlantListRecyclerAdapter(getApplicationContext(),lst_plants);
+        //rv_plantsList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rv_plantsList.setAdapter(adapter);
+
 //        Query query = cr_inventoryItems.orderBy("stock",Query.Direction.ASCENDING);
 //        FirestoreRecyclerOptions<StoreItem> options = new FirestoreRecyclerOptions.Builder<StoreItem>()
 //                .setQuery(query,StoreItem.class).build();
@@ -251,36 +252,41 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
 
-//    public void getPlants(){
-//        Gson gson = new Gson();
-//
-//        Plant_item plantItem = new Plant_item(Long.toString(System.currentTimeMillis()) ,name, type,0,0,0,0,0,0);
-//        String jsonStringParams = gson.toJson(plantItem);
-//
-//        JsonObjectRequest jsObjRequest = null;
-//        try {
-//            jsObjRequest = new JsonObjectRequest
-//                    (Request.Method.POST, "https://grut-message-endpoint.azurewebsites.net/api/sqlTest", new JSONObject(jsonStringParams), new Response.Listener<JSONObject>() {
-//
-//                        @Override
-//                        public void onResponse(JSONObject response) {
-//                            //TODO inform the recycler view about the addition of a plant
-//                        }
-//                    }, new Response.ErrorListener() {
-//
-//                        @Override
-//                        public void onErrorResponse(VolleyError error) {
-//                            error.printStackTrace();
-//                        }
-//                    }
-//                    );
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // Access the RequestQueue through your singleton class.
+    public void getPlants(){
+        //TODO check that this works
+        Gson gson = new Gson();
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
+                (Request.Method.GET, "https://grut-message-endpoint.azurewebsites.net/api/FetchAllPlants", null, response -> {
+                    Log.wtf("GET Response", response.toString());
+                    for(int i=0; i<response.length();i++){
+                        Plant_item temp;
+                        try {
+                            temp = gson.fromJson(response.getJSONObject(i).toString(), (Type) Plant_item.class);
+                            lst_plants.add(temp);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, error -> {
+                    Log.wtf("WTF on Error",error.getMessage());
+                    error.printStackTrace();
+                }
+                );
+        mQueue.add(jsonArrayRequest);
+//        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+//                (Request.Method.GET, "https://grut-message-endpoint.azurewebsites.net/api/FetchAllPlants", null , response -> {
+//                    //TODO Reformat the data here
+//                    Log.wtf("GET Response", response.toString());
+//                    }, error -> {
+//                    Log.wtf("WTF on Error",error.getMessage());
+//                    error.printStackTrace();
+//                }
+//                );
+
+        // Access the RequestQueue through your singleton class.
 //        mQueue.add(jsObjRequest);
-//    }
+
+    }
 
     public void addPlant(String name, String type){
         Gson gson = new Gson();
@@ -291,20 +297,12 @@ public class MainActivity extends AppCompatActivity {
         JsonObjectRequest jsObjRequest = null;
         try {
             jsObjRequest = new JsonObjectRequest
-                    (Request.Method.POST, "https://grut-message-endpoint.azurewebsites.net/api/sqlTest", new JSONObject(jsonStringParams), new Response.Listener<JSONObject>() {
-
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.wtf("WTF onResponse",response.toString());
-                            //TODO inform the recycler view about the addition of a plant
-                        }
-                    }, new Response.ErrorListener() {
-
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.wtf("WTF on Error",error.getMessage());
-                            error.printStackTrace();
-                        }
+                    (Request.Method.POST, "https://grut-message-endpoint.azurewebsites.net/api/sqlTest", new JSONObject(jsonStringParams), response -> {
+                        Log.wtf("WTF onResponse",response.toString());
+                        //TODO inform the recycler view about the addition of a plant
+                    }, error -> {
+                        Log.wtf("WTF on Error",error.getMessage());
+                        error.printStackTrace();
                     }
                     );
         } catch (JSONException e) {
