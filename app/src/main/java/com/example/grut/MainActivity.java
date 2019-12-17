@@ -60,6 +60,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -105,9 +106,8 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         mQueue = Volley.newRequestQueue(this);
 
+        lst_plants = new ArrayList<>();
         getPlants();
-
-        setUpRecyclerView();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setImageDrawable(getDrawable(R.drawable.ic_add_white_24dp));
@@ -189,22 +189,12 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     private void setUpRecyclerView(){
-
         rv_plantsList = findViewById(R.id.plants_list);
         adapter = new PlantListRecyclerAdapter(getApplicationContext(),lst_plants);
-        //rv_plantsList.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv_plantsList.setAdapter(adapter);
+        rv_plantsList.setLayoutManager(new LinearLayoutManager(getApplication()));
+        rv_plantsList.setHasFixedSize(true);
 
-//        Query query = cr_inventoryItems.orderBy("stock",Query.Direction.ASCENDING);
-//        FirestoreRecyclerOptions<StoreItem> options = new FirestoreRecyclerOptions.Builder<StoreItem>()
-//                .setQuery(query,StoreItem.class).build();
-//
-        //adapter = new PlantListRecyclerAdapter(options);
-//        recyclerView = findViewById(R.id.inventory_recycler);
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-//
 //        adapter.setOnItemClickListener(new InventoryRecyclerAdapter.OnItemClickListener() {
 //            @Override
 //            public void onPlusClick(int position,View itemView) {
@@ -255,36 +245,71 @@ public class MainActivity extends AppCompatActivity {
     public void getPlants(){
         //TODO check that this works
         Gson gson = new Gson();
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-                (Request.Method.GET, "https://grut-message-endpoint.azurewebsites.net/api/FetchAllPlants", null, response -> {
+//        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
+//                (Request.Method.GET, "https://grut-message-endpoint.azurewebsites.net/api/FetchAllPlants", null, response -> {
+//                    Log.wtf("GET Response", response.toString());
+//                    JSONArray tempArray = null;
+//                    try {
+//                        tempArray = new JSONArray(response);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    try {
+//                        tempArray = response.getJSONArray(0);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    for(int i=0; i<response.length();i++){
+//                        Plant_item temp;
+//                        try {
+//                            //Log.wtf("I AM HERE","");
+//                            JSONObject temoObj = tempArray.getJSONObject(i);
+//                            //Log.wtf("I AM HERE","");
+//                            temp = gson.fromJson(temoObj.toString(), (Type) Plant_item.class);
+//                            lst_plants.add(temp);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                    setUpRecyclerView();
+//                }, error -> {
+//                    Log.wtf("GET WTF on Error",error.getMessage());
+//                    error.printStackTrace();
+//                }
+//                );
+//        mQueue.add(jsonArrayRequest);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, "https://grut-message-endpoint.azurewebsites.net/api/FetchAllPlants", null , response -> {
+                    //TODO Reformat the data here
                     Log.wtf("GET Response", response.toString());
-                    for(int i=0; i<response.length();i++){
+                    JSONArray recordsets = new JSONArray();
+                    int length = 0;
+                    try {
+                        recordsets = response.getJSONArray("recordsets");
+                        length = recordsets.getJSONArray(0).length();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    JSONObject tempObject = new JSONObject();
+                    for(int i=0 ; i < length ; i++){
                         Plant_item temp;
                         try {
-                            temp = gson.fromJson(response.getJSONObject(i).toString(), (Type) Plant_item.class);
-                            lst_plants.add(temp);
+                            tempObject = recordsets.getJSONArray(0).getJSONObject(i);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                            temp = gson.fromJson(tempObject.toString(), (Type) Plant_item.class);
+                            lst_plants.add(temp);
+                            Log.wtf("JSON OBJECT", temp.getId());
                     }
-                }, error -> {
+                    }, error -> {
                     Log.wtf("WTF on Error",error.getMessage());
                     error.printStackTrace();
                 }
                 );
-        mQueue.add(jsonArrayRequest);
-//        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-//                (Request.Method.GET, "https://grut-message-endpoint.azurewebsites.net/api/FetchAllPlants", null , response -> {
-//                    //TODO Reformat the data here
-//                    Log.wtf("GET Response", response.toString());
-//                    }, error -> {
-//                    Log.wtf("WTF on Error",error.getMessage());
-//                    error.printStackTrace();
-//                }
-//                );
 
-        // Access the RequestQueue through your singleton class.
-//        mQueue.add(jsObjRequest);
+         //Access the RequestQueue through your singleton class.
+        mQueue.add(jsObjRequest);
 
     }
 
@@ -300,6 +325,7 @@ public class MainActivity extends AppCompatActivity {
                     (Request.Method.POST, "https://grut-message-endpoint.azurewebsites.net/api/sqlTest", new JSONObject(jsonStringParams), response -> {
                         Log.wtf("WTF onResponse",response.toString());
                         //TODO inform the recycler view about the addition of a plant
+                        adapter.notifyDataSetChanged();
                     }, error -> {
                         Log.wtf("WTF on Error",error.getMessage());
                         error.printStackTrace();
