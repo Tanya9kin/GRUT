@@ -245,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getPlants(){
-        //TODO check that this works
         Gson gson = new Gson();
 //        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
 //                (Request.Method.GET, "https://grut-message-endpoint.azurewebsites.net/api/FetchAllPlants", null, response -> {
@@ -302,7 +301,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                         temp = gson.fromJson(tempObject.toString(), (Type) Plant_item.class);
                         lst_plants.add(temp);
-                        //TODO why name is null
                         try {
                             Log.wtf("JSON OBJECT", tempObject.getString("plantName"));
                         } catch (JSONException e) {
@@ -332,7 +330,9 @@ public class MainActivity extends AppCompatActivity {
             jsObjRequest = new JsonObjectRequest
                     (Request.Method.POST, "https://grut-message-endpoint.azurewebsites.net/api/sqlTest", new JSONObject(jsonStringParams), response -> {
                         Log.wtf("WTF onResponse",response.toString());
+                        Log.wtf("WTF onResponse",jsonStringParams);
                         //TODO inform the recycler view about the addition of a plant
+                        lst_plants.add(plantItem);
                         adapter.notifyDataSetChanged();
                     }, error -> {
                         Log.wtf("WTF on Error",error.getMessage());

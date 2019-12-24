@@ -6,6 +6,8 @@
     <string-array name="plant_type">
         <item>Cactus</item>
         <item>Succulent</item>
+        <item>Peperomia</item>
+        <item>Hoya</item>
         <item>Evergreen</item>
     </string-array>
 </resources>

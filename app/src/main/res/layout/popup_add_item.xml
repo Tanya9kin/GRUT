@@ -6,7 +6,7 @@
     android:layout_marginRight="30dp"
     android:layout_marginLeft="30dp"
     android:layout_gravity="center"
-    android:background="@color/colorAccentLight"
+    android:background="@color/colorPrimary"
     android:id="@+id/add_item_popup">
 
     <TextView
@@ -16,14 +16,15 @@
         android:text="Add plant"
         android:textSize="30dp"
         android:gravity="center"
-        android:background="@color/colorAccent"
-        android:textColor="@android:color/black" />
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@android:color/white" />
 
     <EditText
         android:layout_below="@id/header"
         android:id="@+id/plant_name"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
+        android:inputType="textNoSuggestions"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:layout_marginTop="5dp"
