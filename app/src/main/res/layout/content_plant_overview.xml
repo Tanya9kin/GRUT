@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".PlantOverview"
+    tools:showIn="@layout/activity_plant_overview">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="PlantName"
+            android:textSize="50sp"
+            />
+
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:text="Type"
+            android:textSize="30sp"
+            android:layout_marginBottom="20dp"
+            />
+
+        <TextView
+            android:id="@+id/requirements"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/type"
+            android:layout_marginBottom="20dp"
+            android:text="Requirements"
+            android:textSize="30sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/requirements"
+            android:layout_below="@id/type"
+            android:layout_alignParentRight="true"
+            android:gravity="right">
+
+            <ImageView
+                android:id="@+id/requirements_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/plant_state"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/ic_020_thermometer"/>
+
+            <ImageView
+                android:id="@+id/requirements_moist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/plant_temp"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/ic_007_drops"/>
+
+            <ImageView
+                android:id="@+id/requirements_sun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/plant_moist"
+                android:src="@drawable/ic_022_sun"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/requirements"
+            android:layout_marginBottom="20dp"
+            android:text="Current state"
+            android:textSize="30sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/state"
+            android:layout_below="@id/requirements"
+            android:layout_alignParentRight="true"
+            android:gravity="right">
+
+            <ImageView
+                android:id="@+id/state_temp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/plant_state"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/ic_020_thermometer"/>
+
+            <ImageView
+                android:id="@+id/state_moist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/plant_temp"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/ic_007_drops"/>
+
+            <ImageView
+                android:id="@+id/state_sun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/plant_moist"
+                android:src="@drawable/ic_022_sun"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/recommendation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/state"
+            android:text="Recommendation:"
+            android:textSize="30sp"/>
+
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

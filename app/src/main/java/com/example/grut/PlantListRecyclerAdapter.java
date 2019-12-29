@@ -22,6 +22,18 @@ public class PlantListRecyclerAdapter extends RecyclerView.Adapter<PlantListRecy
     Context context;
     List<Plant_item> mData;
 
+    private OnItemClickListener mlistener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int position, View itemView);
+        //boolean onLongClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mlistener = listener;
+    }
+
+
     public PlantListRecyclerAdapter(Context context, List<Plant_item> mData) {
         this.context = context;
         this.mData = mData;
@@ -32,7 +44,7 @@ public class PlantListRecyclerAdapter extends RecyclerView.Adapter<PlantListRecy
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View v;
         v = LayoutInflater.from(context).inflate(R.layout.plant_item, parent,false);
-        MyViewHolder vHolder = new MyViewHolder(v);
+        MyViewHolder vHolder = new MyViewHolder(v,mlistener);
         return vHolder;
     }
 
@@ -55,7 +67,7 @@ public class PlantListRecyclerAdapter extends RecyclerView.Adapter<PlantListRecy
         private ImageView im_currTemp;
         private ImageView im_currState;
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView, final PlantListRecyclerAdapter.OnItemClickListener listener) {
             super(itemView);
 
             tv_plantName = itemView.findViewById(R.id.plant_name);
@@ -63,6 +75,18 @@ public class PlantListRecyclerAdapter extends RecyclerView.Adapter<PlantListRecy
             im_currSun = itemView.findViewById(R.id.plant_sun);
             im_currTemp = itemView.findViewById(R.id.plant_temp);
             im_currState = itemView.findViewById(R.id.plant_state);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null){
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION){
+                            listener.onItemClick(position,itemView);
+                        }
+                    }
+                }
+            });
         }
     }
 }

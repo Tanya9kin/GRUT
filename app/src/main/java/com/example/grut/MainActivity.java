@@ -3,6 +3,7 @@ package com.example.grut;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
@@ -197,6 +198,13 @@ public class MainActivity extends AppCompatActivity {
         rv_plantsList.setLayoutManager(new LinearLayoutManager(getApplication()));
         rv_plantsList.setHasFixedSize(true);
 
+        adapter.setOnItemClickListener(new PlantListRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View itemView) {
+                Intent toSinglePlant = new Intent(getApplicationContext(), PlantOverview.class);
+            }
+        });
+
 //        adapter.setOnItemClickListener(new InventoryRecyclerAdapter.OnItemClickListener() {
 //            @Override
 //            public void onPlusClick(int position,View itemView) {
@@ -246,39 +254,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void getPlants(){
         Gson gson = new Gson();
-//        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-//                (Request.Method.GET, "https://grut-message-endpoint.azurewebsites.net/api/FetchAllPlants", null, response -> {
-//                    Log.wtf("GET Response", response.toString());
-//                    JSONArray tempArray = null;
-//                    try {
-//                        tempArray = new JSONArray(response);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    try {
-//                        tempArray = response.getJSONArray(0);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    for(int i=0; i<response.length();i++){
-//                        Plant_item temp;
-//                        try {
-//                            //Log.wtf("I AM HERE","");
-//                            JSONObject temoObj = tempArray.getJSONObject(i);
-//                            //Log.wtf("I AM HERE","");
-//                            temp = gson.fromJson(temoObj.toString(), (Type) Plant_item.class);
-//                            lst_plants.add(temp);
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                    setUpRecyclerView();
-//                }, error -> {
-//                    Log.wtf("GET WTF on Error",error.getMessage());
-//                    error.printStackTrace();
-//                }
-//                );
-//        mQueue.add(jsonArrayRequest);
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, "https://grut-message-endpoint.azurewebsites.net/api/FetchAllPlants", null , response -> {
                     //TODO Reformat the data here
