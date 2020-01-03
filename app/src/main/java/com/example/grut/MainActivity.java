@@ -202,6 +202,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position, View itemView) {
                 Intent toSinglePlant = new Intent(getApplicationContext(), PlantOverview.class);
+                toSinglePlant.putExtra("plant id", adapter.mData.get(position).getId());
+                startActivity(toSinglePlant);
             }
         });
 
