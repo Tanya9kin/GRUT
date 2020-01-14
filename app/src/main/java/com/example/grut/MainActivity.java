@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.nfc.NfcAdapter;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -59,6 +60,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -95,6 +97,13 @@ public class MainActivity extends AppCompatActivity {
     private Spinner sp_type;
     private Button btn_confirm;
     private Button btn_cancel;
+    private TextView tv_id;
+    private Button btn_readNFC;
+
+    /**
+        NFC
+     */
+    private NfcAdapter nfcAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
         lst_plants = new ArrayList<>();
         getPlants();
 
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
         //setUpRecyclerView();
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -117,12 +128,17 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog();
+                if(nfcAdapter != null && nfcAdapter.isEnabled()){
+                    Toast.makeText(getApplicationContext(),"NFC availiable",Toast.LENGTH_SHORT).show();
+                    openDialog();
+                } else {
+                    Toast.makeText(getApplicationContext(),"NFC not availiable, open NFC to be able to add plant",Toast.LENGTH_LONG).show();
+                }
+
             }
         });
+    }
 
-
-}
 
     /**
      * Dialog for adding a new plant
@@ -133,6 +149,20 @@ public class MainActivity extends AppCompatActivity {
         sp_type = popUpAddItem.findViewById(R.id.plant_type);
         btn_cancel = popUpAddItem.findViewById(R.id.cancel);
         btn_confirm = popUpAddItem.findViewById(R.id.confirm);
+        tv_id = popUpAddItem.findViewById(R.id.nfcID);
+        btn_readNFC = popUpAddItem.findViewById(R.id.nfcButton);
+
+//        btn_readNFC.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String tagContent = null;
+//                try {
+//                    byte[] payload =
+//                } catch (UnsupportedEncodingException e) {
+//
+//                }
+//            }
+//        });
 
         btn_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         popUpAddItem.show();
     }
 
-//    public void setUpRequestQueue(){
+    //    public void setUpRequestQueue(){
 //// Instantiate the RequestQueue.
 //        mQueue = Volley.newRequestQueue(this);
 //        String url ="http://www.google.com";
@@ -258,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
         Gson gson = new Gson();
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, "https://grut-message-endpoint.azurewebsites.net/api/FetchAllPlants", null , response -> {
-                    //TODO Reformat the data here
+                    //TODO get the requirments for the plant
                     Log.wtf("GET Response", response.toString());
                     JSONArray recordsets = new JSONArray();
                     int length = 0;
