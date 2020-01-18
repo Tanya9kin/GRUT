@@ -236,53 +236,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(toSinglePlant);
             }
         });
-
-//        adapter.setOnItemClickListener(new InventoryRecyclerAdapter.OnItemClickListener() {
-//            @Override
-//            public void onPlusClick(int position,View itemView) {
-//                StoreItem currItem = adapter.getItem(position);
-//                EditText et_addAmount = itemView.findViewById(R.id.add_amount);
-//
-//                final Integer oldAmount = currItem.getStock();
-//                final Integer amountToAdd;
-//                if(et_addAmount.getText().toString().isEmpty()){
-//                    amountToAdd = 0;
-//                } else {
-//                    amountToAdd = Integer.parseInt(et_addAmount.getText().toString());
-//                }
-//
-//                if(amountToAdd <= 0 || amountToAdd > 10000){
-//                    //Toast.makeText(getApplicationContext(),"Amount is invalid!",Toast.LENGTH_SHORT).show();
-//                    Snackbar.make(findViewById(R.id.screen_inventory),"Amount is invalid!", Snackbar.LENGTH_SHORT).show();
-//                    return;
-//                }
-//
-//                cr_inventoryItems.whereEqualTo("name", currItem.getName()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                        queryDocumentSnapshots.getDocuments().get(0).getReference().update("stock",amountToAdd + oldAmount).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                //Toast.makeText(getApplicationContext(),"Stock succesfully updated!",Toast.LENGTH_SHORT).show();
-//                                Snackbar.make(findViewById(R.id.screen_inventory),"Stock succesfully updated!", Snackbar.LENGTH_SHORT).show();
-//                            }
-//                        });
-//                    }
-//                });
-//                adapter.notifyItemChanged(position);
-//                et_addAmount.setText("");
-//            }
-//
-//            @Override
-//            public boolean onLongClick(int position) {
-//                /**Edit item popup goes up and gives the manager the option to edit a chosen item**/
-//                StoreItem currItem = adapter.getItem(position);
-//                editItemPopup(position);
-//                adapter.notifyItemChanged(position);
-//                return false;
-//            }
-//        });
     }
+
 
     public void getPlants(){
         Gson gson = new Gson();

@@ -121,39 +121,37 @@ public class PlantOverview extends AppCompatActivity {
 
     private void setLightIcon(ImageView iv_light, int light) {
         if(light < 100){
-            iv_light.setImageResource(R.drawable.ic_001_cloudy);
+            iv_light.setImageResource(R.drawable.ic_033_super_cloudy);
         } else if (light < 200) {
-            iv_light.setImageResource(R.drawable.ic_001_cloudy);
+            iv_light.setImageResource(R.drawable.ic_011_cloudy);
         } else if (light < 300) {
-            iv_light.setImageResource(R.drawable.ic_022_sun);
+            iv_light.setImageResource(R.drawable.ic_044_sun);
         } else if (light >500) {
-            iv_light.setImageResource(R.drawable.ic_022_sun);
+            iv_light.setImageResource(R.drawable.ic_005_hot);
         }
     }
 
     private void setMoistIcon(ImageView iv_moist, int moist) {
         if(moist < 300){
-            iv_moist.setImageResource(R.drawable.ic_026_flood);
+            iv_moist.setImageResource(R.drawable.ic_025_flood);
         } else if (moist < 400) {
-            iv_moist.setImageResource(R.drawable.ic_007_drops);
+            iv_moist.setImageResource(R.drawable.ic_020_drop);
         } else if (moist < 500) {
-            iv_moist.setImageResource(R.drawable.ic_007_drops);
+            iv_moist.setImageResource(R.drawable.ic_009_drops);
         } else if (moist >= 500) {
-            iv_moist.setImageResource(R.drawable.ic_007_drops);
+            iv_moist.setImageResource(R.drawable.ic_050_drought);
         }
     }
 
     private void setTempIcon(ImageView iv_temp, int temp) {
         if(temp < 0){
-            iv_temp.setImageResource(R.drawable.ic_020_thermometer);
+            iv_temp.setImageResource(R.drawable.ic_008_snowflake);
         } else if (temp < 10) {
-            iv_temp.setImageResource(R.drawable.ic_020_thermometer);
-        } else if (temp < 20) {
-            iv_temp.setImageResource(R.drawable.ic_020_thermometer);
+            iv_temp.setImageResource(R.drawable.ic_027_cold);
         } else if (temp < 30) {
-            iv_temp.setImageResource(R.drawable.ic_020_thermometer);
-        } else if (temp >= 30) {
-            iv_temp.setImageResource(R.drawable.ic_020_thermometer);
+            iv_temp.setImageResource(R.drawable.ic_017_warm_1);
+        } else {
+            iv_temp.setImageResource(R.drawable.ic_007_super_hot);
         }
     }
 

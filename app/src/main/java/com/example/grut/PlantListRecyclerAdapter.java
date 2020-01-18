@@ -22,6 +22,43 @@ public class PlantListRecyclerAdapter extends RecyclerView.Adapter<PlantListRecy
     Context context;
     List<Plant_item> mData;
 
+    /**
+     * For the smiley calculation
+     */
+    static final int DELTA_TEMP = 10;
+    static final int DELTA_MOIST = 150;
+    static final int DELTA_LIGHT = 300;
+
+    static final int PLANT_HAPPY = 1;
+    static final int PLANT_OK = 0;
+    static final int PLANT_SAD = -1;
+
+    static final int VALUE_TOO_HIGH = 1;
+    static final int VALUE_OPTIMAL = 0;
+    static final int VALUE_TOO_LOW = -1;
+
+    public static int getCurrState(int currValue, int optimalValue, int delta){
+        if((currValue >= optimalValue-delta) && (currValue <= optimalValue+delta)){
+            return VALUE_OPTIMAL;
+        } else if(currValue > optimalValue+delta){
+            return VALUE_TOO_HIGH;
+        } else{ //(currValue < optimalValue-delta)
+            return VALUE_TOO_LOW;
+        }
+    }
+
+    public static int isPlantHappy(int tempState, int moistState, int lightState){
+        if(tempState == VALUE_OPTIMAL && moistState == VALUE_OPTIMAL && lightState == VALUE_OPTIMAL){
+            return PLANT_HAPPY;
+        } else if((tempState != VALUE_OPTIMAL && moistState == VALUE_OPTIMAL && lightState == VALUE_OPTIMAL) ||
+                (tempState == VALUE_OPTIMAL && moistState != VALUE_OPTIMAL && lightState == VALUE_OPTIMAL) ||
+                (tempState == VALUE_OPTIMAL && moistState == VALUE_OPTIMAL && lightState != VALUE_OPTIMAL)){
+            return PLANT_OK;
+        } else {
+            return PLANT_SAD;
+        }
+    }
+
     private OnItemClickListener mlistener;
 
     public interface OnItemClickListener {
@@ -76,6 +113,70 @@ public class PlantListRecyclerAdapter extends RecyclerView.Adapter<PlantListRecy
             im_currTemp = itemView.findViewById(R.id.plant_temp);
             im_currState = itemView.findViewById(R.id.plant_state);
 
+            int currTemp = 25;
+            int currMoist = 600;
+            int currLight = 40;
+
+            int optTemp = 30;
+            int optMoist = 400;
+            int optLight = 30;
+
+            int tempEmoji = getCurrState(currTemp, optTemp, DELTA_TEMP);
+            int moistEmoji = getCurrState(currMoist, optMoist, DELTA_MOIST);
+            int lightEmoji = getCurrState(currLight, optLight, DELTA_LIGHT);
+
+            //temp
+            switch(tempEmoji){
+                case VALUE_TOO_HIGH:
+                    im_currTemp.setImageResource(R.drawable.ic_007_super_hot);
+                    break;
+                case VALUE_OPTIMAL:
+                    im_currTemp.setImageResource(R.drawable.ic_017_warm_1);
+                    break;
+                case VALUE_TOO_LOW:
+                    im_currTemp.setImageResource(R.drawable.ic_027_cold);
+                    break;
+            }
+            //soil moist
+            switch(moistEmoji){
+                case VALUE_TOO_HIGH:
+                    im_currMoist.setImageResource(R.drawable.ic_025_flood);
+                    break;
+                case VALUE_OPTIMAL:
+                    im_currMoist.setImageResource(R.drawable.ic_020_drop);
+                    break;
+                case VALUE_TOO_LOW:
+                    im_currMoist.setImageResource(R.drawable.ic_050_drought);
+                    break;
+            }
+            //light
+            switch(lightEmoji){
+                case VALUE_TOO_HIGH:
+                    im_currSun.setImageResource(R.drawable.ic_005_hot);
+                    break;
+                case VALUE_OPTIMAL:
+                    im_currSun.setImageResource(R.drawable.ic_044_sun);
+                    break;
+                case VALUE_TOO_LOW:
+                    im_currSun.setImageResource(R.drawable.ic_033_super_cloudy);
+                    break;
+            }
+
+            //set global plant state emoji
+            int plantState = isPlantHappy(tempEmoji, moistEmoji, lightEmoji);
+
+            switch(plantState){
+                case PLANT_HAPPY:
+                    im_currState.setImageResource(R.drawable.ic_006_full);
+                    break;
+                case PLANT_OK:
+                    im_currState.setImageResource(R.drawable.ic_004_expressionless);
+                    break;
+                case PLANT_SAD:
+                    im_currState.setImageResource(R.drawable.ic_003_dizzy);
+                    break;
+            }
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -90,80 +191,3 @@ public class PlantListRecyclerAdapter extends RecyclerView.Adapter<PlantListRecy
         }
     }
 }
-
-//
-//public class PlantListRecyclerAdapter extends RecyclerView.Adapter<PlantListRecyclerAdapter.ViewHolder> {
-//
-//    private OnItemClickListener mlistener;
-//
-//    public interface OnItemClickListener {
-//        void onNameClick(int position, View itemView);
-//        //boolean onLongClick(int position);
-//    }
-//
-//    public void setOnItemClickListener(OnItemClickListener listener){
-//        mlistener = listener;
-//    }
-//
-//
-//    Context context;
-//    public class MyViewHolder extends RecyclerView.ViewHolder{
-//
-//        public TextView tv_itemName;
-//        public ImageView iv_drop1;
-//        public ImageView iv_drop2;
-//        public ImageView iv_drop3;
-//
-//        public MyViewHolder(@NonNull final View itemView, final PlantListRecyclerAdapter.OnItemClickListener listener) {
-//            super(itemView);
-//            tv_itemName = itemView.findViewById(R.id.plant_name);
-//            iv_drop1 = itemView.findViewById(R.id.plant_drop_1);
-//            iv_drop2 = itemView.findViewById(R.id.plant_drop_2);
-//            iv_drop3 = itemView.findViewById(R.id.plant_drop_3);
-//
-////            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-////                @Override
-////                public boolean onLongClick(View v) {
-////                    if(listener != null){
-////                        int position = getAdapterPosition();
-////                        if(position != RecyclerView.NO_POSITION){
-////                            listener.onLongClick(position);
-////                            return true;
-////                        }
-////                    }
-////                    return false;
-////                }
-////            });
-//            tv_itemName.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if(listener != null){
-////                        int position = getAdapterPosition();
-////                        if(position != RecyclerView.NO_POSITION){
-////                            listener.onPlusClick(position,itemView);
-////                        }
-//                    }
-//                }
-//            });
-//        }
-//    }
-//
-////    @NonNull
-//    //@Override
-////    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-////        context = viewGroup.getContext();
-////        View view = LayoutInflater.from(context).inflate(R.layout.plant_item, viewGroup, false);
-////        PlantListRecyclerAdapter.MyViewHolder holder = new PlantListRecyclerAdapter.MyViewHolder(view, mlistener);
-////        return holder;
-////    }
-//
-//    //@Override
-//    public void onBindViewHolder(@NonNull PlantListRecyclerAdapter.MyViewHolder viewHolder, int i) {
-//
-//    }
-//
-//    //@Override
-//    public int getItemCount() {
-//        return 0;
-//    }
-//}
