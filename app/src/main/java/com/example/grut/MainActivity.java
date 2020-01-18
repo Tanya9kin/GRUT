@@ -121,8 +121,6 @@ public class MainActivity extends AppCompatActivity {
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
-        //setUpRecyclerView();
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setImageDrawable(getDrawable(R.drawable.ic_add_white_24dp));
         fab.setOnClickListener(new View.OnClickListener() {
