@@ -56,8 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/plant_state"
-                android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_020_thermometer"/>
+                android:layout_marginLeft="5dp"/>
 
             <ImageView
                 android:id="@+id/requirements_moist"
@@ -65,16 +64,14 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/plant_temp"
-                android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_007_drops"/>
+                android:layout_marginLeft="5dp"/>
 
             <ImageView
                 android:id="@+id/requirements_sun"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/plant_moist"
-                android:src="@drawable/ic_022_sun"/>
+                android:layout_toStartOf="@id/plant_moist"/>
         </LinearLayout>
 
         <TextView
@@ -100,8 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/plant_state"
-                android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_020_thermometer"/>
+                android:layout_marginLeft="5dp"/>
 
             <ImageView
                 android:id="@+id/state_moist"
@@ -109,16 +105,14 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/plant_temp"
-                android:layout_marginLeft="5dp"
-                android:src="@drawable/ic_007_drops"/>
+                android:layout_marginLeft="5dp"/>
 
             <ImageView
                 android:id="@+id/state_sun"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/plant_moist"
-                android:src="@drawable/ic_022_sun"/>
+                android:layout_toStartOf="@id/plant_moist"/>
         </LinearLayout>
 
         <TextView

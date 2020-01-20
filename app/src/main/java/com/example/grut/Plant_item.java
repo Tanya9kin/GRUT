@@ -7,14 +7,14 @@ public class Plant_item {
     private String id;
     @SerializedName("plantName")
     private String plantName;
-    @SerializedName("type")
-    private String type;
+    @SerializedName("plantTypes")
+    private String plantTypes;
     @SerializedName("optTemp")
     private Integer optTemp;
     @SerializedName("optLight")
     private Integer optLight;
-    @SerializedName("optMoist")
-    private Integer optMoist;
+    @SerializedName("optrMoist")
+    private Integer optrMoist;
     @SerializedName("currTemp")
     private Integer currTemp;
     @SerializedName("currLight")
@@ -22,15 +22,15 @@ public class Plant_item {
     @SerializedName("currMoist")
     private Integer currMoist;
 
-    public Plant_item(String id, String name, String type,
-                      Integer optTemp, Integer optLight, Integer optMoist,
+    public Plant_item(String id, String name, String plantTypes,
+                      Integer optTemp, Integer optLight, Integer optMoistr,
                       Integer  currTemp, Integer currLight, Integer currMoist) {
         this.id = id;
         this.plantName = name;
-        this.type = type;
+        this.plantTypes = plantTypes;
         this.optTemp = optTemp;
         this.optLight = optLight;
-        this.optMoist = optMoist;
+        this.optrMoist = optrMoist;
         this.currLight = currLight;
         this.currMoist = currMoist;
         this.currTemp = currTemp;
@@ -56,7 +56,7 @@ public class Plant_item {
     }
 
     public Integer getOptMoist() {
-        return optMoist;
+        return optrMoist;
     }
 
     public Integer getCurrTemp() {
@@ -72,7 +72,7 @@ public class Plant_item {
     }
 
     public String getType() {
-        return type;
+        return plantTypes;
     }
 
     //Setters:
@@ -87,7 +87,7 @@ public class Plant_item {
     }
 
     public void setType(String type) {
-        this.type = type;
+        this.plantTypes = type;
     }
 
     public void setOptTemp(Integer optTemp) {
@@ -98,8 +98,8 @@ public class Plant_item {
         this.optLight = optLight;
     }
 
-    public void setOptMoist(Integer optMoist) {
-        this.optMoist = optMoist;
+    public void setOptMoist(Integer optrMoist) {
+        this.optrMoist = optrMoist;
     }
 
     public void setCurrTemp(Integer currTemp) {

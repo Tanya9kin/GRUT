@@ -21,7 +21,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:layout_marginLeft="5dp"
-        android:src="@drawable/ic_001_happy"/>
+        android:src="@drawable/ic_003_dizzy"/>
 
     <ImageView
         android:id="@+id/plant_temp"
@@ -30,7 +30,7 @@
         android:layout_centerVertical="true"
         android:layout_toStartOf="@id/plant_state"
         android:layout_marginLeft="5dp"
-        android:src="@drawable/ic_020_thermometer"/>
+        android:src="@drawable/ic_003_dizzy"/>
 
     <ImageView
         android:id="@+id/plant_moist"
@@ -39,7 +39,7 @@
         android:layout_centerVertical="true"
         android:layout_toStartOf="@id/plant_temp"
         android:layout_marginLeft="5dp"
-        android:src="@drawable/ic_007_drops"/>
+        android:src="@drawable/ic_003_dizzy"/>
 
     <ImageView
         android:id="@+id/plant_sun"
@@ -47,6 +47,6 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@id/plant_moist"
-        android:src="@drawable/ic_022_sun"/>
+        android:src="@drawable/ic_003_dizzy"/>
 
 </RelativeLayout>

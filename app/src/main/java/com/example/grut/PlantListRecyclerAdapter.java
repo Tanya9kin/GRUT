@@ -1,10 +1,12 @@
 package com.example.grut;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,18 +80,88 @@ public class PlantListRecyclerAdapter extends RecyclerView.Adapter<PlantListRecy
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+    public PlantListRecyclerAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View v;
         v = LayoutInflater.from(context).inflate(R.layout.plant_item, parent,false);
-        MyViewHolder vHolder = new MyViewHolder(v,mlistener);
+        PlantListRecyclerAdapter.MyViewHolder vHolder = new PlantListRecyclerAdapter.MyViewHolder(v,mlistener);
         return vHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
-        holder.tv_plantName.setText(mData.get(i).getName());
-        //holder.im_currTemp.setImageDrawable(getDrawable(R.drawable.ic_020_thermometer));
-        //TODO add the images dynamically according to stats
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int i) {
+        Plant_item plantData = mData.get(i);
+        holder.tv_plantName.setText(plantData.getName());
+
+        if(plantData.getCurrTemp() == null || plantData.getCurrLight() == null || plantData.getCurrMoist() == null){
+            holder.im_currTemp.setImageResource(R.drawable.ic_025_thinking);
+            holder.im_currMoist.setImageResource(R.drawable.ic_025_thinking);
+            holder.im_currLight.setImageResource(R.drawable.ic_025_thinking);
+            holder.im_currState.setImageResource(R.drawable.ic_025_thinking);
+            return;
+        }
+        int currTemp = plantData.getCurrTemp();
+        int currLight = plantData.getCurrLight();
+        int currMoist = plantData.getCurrMoist();
+
+        int optTemp = plantData.getOptTemp();
+        int optLight = plantData.getOptLight();
+        int optMoist = plantData.getOptMoist();
+
+        int tempEmoji = getCurrState(currTemp, optTemp, DELTA_TEMP);
+        int moistEmoji = getCurrState(currMoist, optMoist, DELTA_MOIST);
+        int lightEmoji = getCurrState(currLight, optLight, DELTA_LIGHT);
+
+        //temp
+        switch(tempEmoji){
+            case VALUE_TOO_HIGH:
+                holder.im_currTemp.setImageResource(R.drawable.ic_007_super_hot);
+                break;
+            case VALUE_OPTIMAL:
+                holder.im_currTemp.setImageResource(R.drawable.ic_017_warm_1);
+                break;
+            case VALUE_TOO_LOW:
+                holder.im_currTemp.setImageResource(R.drawable.ic_027_cold);
+                break;
+        }
+        //soil moist
+        switch(moistEmoji){
+            case VALUE_TOO_HIGH:
+                holder.im_currMoist.setImageResource(R.drawable.ic_025_flood);
+                break;
+            case VALUE_OPTIMAL:
+                holder.im_currMoist.setImageResource(R.drawable.ic_020_drop);
+                break;
+            case VALUE_TOO_LOW:
+                holder.im_currMoist.setImageResource(R.drawable.ic_050_drought);
+                break;
+        }
+        //light
+        switch(lightEmoji){
+            case VALUE_TOO_HIGH:
+                holder.im_currLight.setImageResource(R.drawable.ic_005_hot);
+                break;
+            case VALUE_OPTIMAL:
+                holder.im_currLight.setImageResource(R.drawable.ic_044_sun);
+                break;
+            case VALUE_TOO_LOW:
+                holder.im_currLight.setImageResource(R.drawable.ic_033_super_cloudy);
+                break;
+        }
+
+        //set global plant state emoji
+        int plantState = isPlantHappy(tempEmoji, moistEmoji, lightEmoji);
+
+        switch(plantState){
+            case PLANT_HAPPY:
+                holder.im_currState.setImageResource(R.drawable.ic_006_full);
+                break;
+            case PLANT_OK:
+                holder.im_currState.setImageResource(R.drawable.ic_004_expressionless);
+                break;
+            case PLANT_SAD:
+                holder.im_currState.setImageResource(R.drawable.ic_003_dizzy);
+                break;
+        }
     }
 
     @Override
@@ -98,84 +170,21 @@ public class PlantListRecyclerAdapter extends RecyclerView.Adapter<PlantListRecy
     }
 
     public static  class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView tv_plantName;
-        private ImageView im_currSun;
-        private ImageView im_currMoist;
-        private ImageView im_currTemp;
-        private ImageView im_currState;
+        public TextView tv_plantName;
+        public ImageView im_currLight;
+        public ImageView im_currMoist;
+        public ImageView im_currTemp;
+        public ImageView im_currState;
 
-        public MyViewHolder(View itemView, final PlantListRecyclerAdapter.OnItemClickListener listener) {
+        public MyViewHolder(@NonNull final View itemView, final PlantListRecyclerAdapter.OnItemClickListener listener) {
             super(itemView);
 
             tv_plantName = itemView.findViewById(R.id.plant_name);
             im_currMoist = itemView.findViewById(R.id.plant_moist);
-            im_currSun = itemView.findViewById(R.id.plant_sun);
+            im_currLight = itemView.findViewById(R.id.plant_sun);
             im_currTemp = itemView.findViewById(R.id.plant_temp);
             im_currState = itemView.findViewById(R.id.plant_state);
 
-            int currTemp = 25;
-            int currMoist = 600;
-            int currLight = 40;
-
-            int optTemp = 30;
-            int optMoist = 400;
-            int optLight = 30;
-
-            int tempEmoji = getCurrState(currTemp, optTemp, DELTA_TEMP);
-            int moistEmoji = getCurrState(currMoist, optMoist, DELTA_MOIST);
-            int lightEmoji = getCurrState(currLight, optLight, DELTA_LIGHT);
-
-            //temp
-            switch(tempEmoji){
-                case VALUE_TOO_HIGH:
-                    im_currTemp.setImageResource(R.drawable.ic_007_super_hot);
-                    break;
-                case VALUE_OPTIMAL:
-                    im_currTemp.setImageResource(R.drawable.ic_017_warm_1);
-                    break;
-                case VALUE_TOO_LOW:
-                    im_currTemp.setImageResource(R.drawable.ic_027_cold);
-                    break;
-            }
-            //soil moist
-            switch(moistEmoji){
-                case VALUE_TOO_HIGH:
-                    im_currMoist.setImageResource(R.drawable.ic_025_flood);
-                    break;
-                case VALUE_OPTIMAL:
-                    im_currMoist.setImageResource(R.drawable.ic_020_drop);
-                    break;
-                case VALUE_TOO_LOW:
-                    im_currMoist.setImageResource(R.drawable.ic_050_drought);
-                    break;
-            }
-            //light
-            switch(lightEmoji){
-                case VALUE_TOO_HIGH:
-                    im_currSun.setImageResource(R.drawable.ic_005_hot);
-                    break;
-                case VALUE_OPTIMAL:
-                    im_currSun.setImageResource(R.drawable.ic_044_sun);
-                    break;
-                case VALUE_TOO_LOW:
-                    im_currSun.setImageResource(R.drawable.ic_033_super_cloudy);
-                    break;
-            }
-
-            //set global plant state emoji
-            int plantState = isPlantHappy(tempEmoji, moistEmoji, lightEmoji);
-
-            switch(plantState){
-                case PLANT_HAPPY:
-                    im_currState.setImageResource(R.drawable.ic_006_full);
-                    break;
-                case PLANT_OK:
-                    im_currState.setImageResource(R.drawable.ic_004_expressionless);
-                    break;
-                case PLANT_SAD:
-                    im_currState.setImageResource(R.drawable.ic_003_dizzy);
-                    break;
-            }
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
