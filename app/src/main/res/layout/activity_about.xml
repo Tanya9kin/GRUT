@@ -20,40 +20,44 @@
         android:id="@+id/credit1_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="1"
+        />
+
+    <TextView
+        android:id="@+id/credit1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="20sp"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        />
-
-    <TextView
-    android:id="@+id/credit1"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textSize="12sp"
-    android:layout_marginTop="10dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
+        android:text="1 link"
     />
 
     <TextView
         android:id="@+id/credit2_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="30sp"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:text="2"
         />
 
     <TextView
         android:id="@+id/credit2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="20sp"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:text="2 link"
         />
 
 

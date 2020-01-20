@@ -14,7 +14,8 @@ public class About extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
-
+        credit1();
+        credit2();
     }
 
     private void credit1() {
@@ -28,6 +29,7 @@ public class About extends AppCompatActivity {
             }
         });
         TextView from = findViewById(R.id.credit1);
+       // from.setText("click here");
         from.setPaintFlags(from.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         from.setOnClickListener(new View.OnClickListener() {
             @Override

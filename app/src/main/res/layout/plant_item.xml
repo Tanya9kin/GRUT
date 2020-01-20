@@ -30,7 +30,7 @@
         android:layout_centerVertical="true"
         android:layout_toStartOf="@id/plant_state"
         android:layout_marginLeft="5dp"
-        android:src="@drawable/ic_003_dizzy"/>
+        android:src="@drawable/ic_003_dizzy" />
 
     <ImageView
         android:id="@+id/plant_moist"
