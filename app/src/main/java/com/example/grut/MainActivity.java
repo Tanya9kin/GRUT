@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 if(name.length() < 4 || id.length() < 1 || sp_type.getSelectedItem() == null){
                     Toast.makeText(mContext, "Some required fields are not complete", Toast.LENGTH_SHORT).show();
                 } else {
+                    //Toast.makeText(mContext, id + " " + name + " " + type, Toast.LENGTH_SHORT).show();
                     addPlant(id,name,type);
                     popUpAddItem.dismiss();
                 }
@@ -272,6 +273,7 @@ public class MainActivity extends AppCompatActivity {
                     (Request.Method.POST, "https://grut-message-endpoint.azurewebsites.net/api/sqlTest", new JSONObject(jsonStringParams), response -> {
                         Log.wtf("WTF onResponse",response.toString());
                         Log.wtf("WTF onResponse",jsonStringParams);
+                        Toast.makeText(this,"Added plant, you will see it soon",Toast.LENGTH_SHORT).show();
                         lst_plants.add(plantItem);
                         adapter.notifyDataSetChanged();
                     }, error -> {

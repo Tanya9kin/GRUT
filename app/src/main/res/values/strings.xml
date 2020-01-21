@@ -4,6 +4,7 @@
     <string name="title_activity_to_do">ToDoActivity</string>
 
     <string-array name="plant_type">
+        <item>Aroid</item>
         <item>Cactus</item>
         <item>Succulent</item>
         <item>Peperomia</item>
