@@ -31,13 +31,14 @@ public class PlantOverview extends AppCompatActivity {
     private TextView tv_type;
     private TextView tv_requirements;
     private TextView tv_state;
-    private TextView tv_recommendation;
+    //private TextView tv_recommendation;
     private ImageView iv_reqTemp;
     private ImageView iv_currTemp;
     private ImageView iv_reqMoist;
     private ImageView iv_currMoist;
     private ImageView iv_reqLight;
     private ImageView iv_currLight;
+    //private TextView tv_lastUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +53,14 @@ public class PlantOverview extends AppCompatActivity {
         tv_type = findViewById(R.id.type);
         tv_requirements = findViewById(R.id.requirements);
         tv_state = findViewById(R.id.state);
-        tv_recommendation = findViewById(R.id.recommendation);
+        //tv_recommendation = findViewById(R.id.recommendation);
         iv_reqTemp = findViewById(R.id.requirements_temp);
         iv_currTemp = findViewById(R.id.state_temp);
         iv_reqMoist = findViewById(R.id.requirements_moist);
         iv_currMoist = findViewById(R.id.state_moist);
         iv_reqLight = findViewById(R.id.requirements_sun);
         iv_currLight = findViewById(R.id.state_sun);
+        //tv_lastUpdate = findViewById(R.id.time_updated);
 
         Bundle extras = getIntent().getExtras();
         tv_name.setText(extras.getString("name"));
@@ -69,6 +71,7 @@ public class PlantOverview extends AppCompatActivity {
         setLightIcon(iv_reqLight, extras.getInt("optLight"));
         setMoistIcon(iv_reqMoist,extras.getInt("optMoist"));
         setTempIcon(iv_reqTemp,extras.getInt("optTemp"));
+        //tv_lastUpdate.setText("Last Update: +");
 
         //mQueue = Volley.newRequestQueue(this);
 
@@ -124,13 +127,13 @@ public class PlantOverview extends AppCompatActivity {
     }
 
     private void setLightIcon(ImageView iv_light, int light) {
-        if(light < 100){
+        if(light < 30){
             iv_light.setImageResource(R.drawable.ic_033_super_cloudy);
-        } else if (light < 200) {
+        } else if (light < 50) {
             iv_light.setImageResource(R.drawable.ic_011_cloudy);
-        } else if (light < 300) {
+        } else if (light < 80) {
             iv_light.setImageResource(R.drawable.ic_044_sun);
-        } else if (light >500) {
+        } else if (light >= 80) {
             iv_light.setImageResource(R.drawable.ic_005_hot);
         }
     }
@@ -140,9 +143,9 @@ public class PlantOverview extends AppCompatActivity {
             iv_moist.setImageResource(R.drawable.ic_025_flood);
         } else if (moist < 400) {
             iv_moist.setImageResource(R.drawable.ic_020_drop);
-        } else if (moist < 500) {
+        } else if (moist < 550) {
             iv_moist.setImageResource(R.drawable.ic_009_drops);
-        } else if (moist >= 500) {
+        } else if (moist >= 550) {
             iv_moist.setImageResource(R.drawable.ic_050_drought);
         }
     }

@@ -115,13 +115,21 @@
                 android:layout_toStartOf="@id/plant_moist"/>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/recommendation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/state"
-            android:text="Recommendation:"
-            android:textSize="30sp"/>
+        <!--<TextView-->
+            <!--android:id="@+id/recommendation"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/state"-->
+            <!--android:text="Recommendation:"-->
+            <!--android:textSize="30sp"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/time_updated"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/state"-->
+            <!--android:layout_marginBottom="20dp"-->
+            <!--android:text="Last updated:"-->
+            <!--android:textSize="30sp"/>-->
 
 
     </RelativeLayout>

@@ -27,9 +27,9 @@ public class PlantListRecyclerAdapter extends RecyclerView.Adapter<PlantListRecy
     /**
      * For the smiley calculation
      */
-    static final int DELTA_TEMP = 10;
-    static final int DELTA_MOIST = 150;
-    static final int DELTA_LIGHT = 300;
+    static final int DELTA_TEMP = 5;
+    static final int DELTA_MOIST = 30;
+    static final int DELTA_LIGHT = 20;
 
     static final int PLANT_HAPPY = 1;
     static final int PLANT_OK = 0;
